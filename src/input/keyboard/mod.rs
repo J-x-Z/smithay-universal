@@ -1,5 +1,13 @@
 //! Keyboard-related types for smithay's input abstraction
 
+#[cfg(not(feature = "xkbcommon"))]
+mod stub;
+#[cfg(not(feature = "xkbcommon"))]
+pub use stub::*;
+
+#[cfg(feature = "xkbcommon")]
+mod implementation {
+
 use crate::backend::input::KeyState;
 use crate::utils::{IsAlive, Serial, SERIAL_COUNTER};
 use downcast_rs::{impl_downcast, Downcast};
@@ -17,7 +25,7 @@ use tracing::{debug, info, info_span, instrument, trace};
 use xkbcommon::xkb::ffi::XKB_STATE_LAYOUT_EFFECTIVE;
 pub use xkbcommon::xkb::{self, keysyms, Keycode, Keysym};
 
-use super::{GrabStatus, Seat, SeatHandler};
+use super::super::{GrabStatus, Seat, SeatHandler};
 
 #[cfg(feature = "wayland_frontend")]
 use wayland_server::{Resource, Weak};
@@ -1401,3 +1409,6 @@ impl<D: SeatHandler + 'static> KeyboardGrab<D> for DefaultGrab {
 
     fn unset(&mut self, _data: &mut D) {}
 }
+}
+#[cfg(feature = "xkbcommon")]
+pub use implementation::*;
