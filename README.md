@@ -2,10 +2,28 @@
 
 # 🌐 Smithay Universal (Fork)
 
-> **Research Fork**: This repository contains the modified backend for the "Universal Wayland" project (`macniri`, `win-way`).
-> It implements a `Winit`-based backend that decouples Wayland from Linux KMS/DRM, enabling native execution on macOS and Windows.
+> **Research Artifact**: This is a modified fork of [Smithay](https://github.com/Smithay/smithay) designed for cross-platform Wayland research.
+> It enables **native Wayland compositors on macOS and Windows** without Linux kernel dependency, VMs, or X11 translation.
+
+## 🚀 Key Improvements & Modifications
+
+### 1. Universal Winit Backend
+We have significantly overhauled the `backend::winit` module to serve as a production-grade backend rather than just a debug tool.
+- **MacOS (Cocoa/CGL)**: Implemented native CGL context management, `IOSurface` mapping, and Retina scaling support.
+- **Windows (WGL/EGL)**: (In Progress) Implementation of WGL context creation via `glutin`.
+- **Latency Optimization**: Custom rendering loop integration to bypass strict OS windowing limitations.
+
+### 2. Event Loop Fusion
+- **CFRunLoop Integration**: Implements a `Calloop` Event Source that hooks directly into macOS `CFRunLoop`, allowing Wayland clients to be dispatched purely within the native macOS application loop.
+- **Input Bridging**: Low-latency translation of `Winit` events to Wayland input events (keyboard, mouse, touchpad gestures).
+
+### 3. Build System
+- Decoupled `gbm` and `libinput` dependencies to allow compilation on non-Linux targets.
+- Added macOS-specific feature flags and linking arguments.
 
 ---
+
+# Smithay (Original README)
 
 # Smithay
 
