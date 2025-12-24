@@ -83,6 +83,18 @@ backend_winit = [
     "backend_egl",
     "renderer_gl",
 ]
+# Windows-only winit backend with WGL
+backend_winit_windows = [
+    "winit",
+    "backend_wgl",
+    "renderer_gl",
+    "tempfile",
+]
+# Windows OpenGL via WGL
+backend_wgl = [
+    "libloading",
+    "tempfile",
+]
 backend_winit_wayland = [
     "backend_winit",
     "wayland-client",
@@ -287,7 +299,9 @@ features = [
 ]
 optional = true
 
-[dependencies.rustix]
+# rustix features are different per platform
+# Full features on Unix, limited on Windows
+[target.'cfg(unix)'.dependencies.rustix]
 version = "1.0.7"
 features = [
     "event",
@@ -298,6 +312,12 @@ features = [
     "process",
     "shm",
     "time",
+]
+
+[target.'cfg(windows)'.dependencies.rustix]
+version = "1.0.7"
+features = [
+    "net",
 ]
 
 [dependencies.scopeguard]
@@ -355,12 +375,21 @@ optional = true
 version = "0.31.6"
 optional = true
 
-[dependencies.winit]
+# winit with platform-specific features
+[target.'cfg(unix)'.dependencies.winit]
 version = "0.30.0"
 features = [
     "wayland",
     "wayland-dlopen",
     "x11",
+    "rwh_06",
+]
+optional = true
+default-features = false
+
+[target.'cfg(windows)'.dependencies.winit]
+version = "0.30.0"
+features = [
     "rwh_06",
 ]
 optional = true

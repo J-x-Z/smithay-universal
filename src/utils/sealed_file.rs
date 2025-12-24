@@ -1,9 +1,24 @@
+//! Sealed files for safe sharing with clients
+//!
+//! Uses memfd on Linux/Android/FreeBSD, tempfile on others
+
 use std::{
     ffi::CStr,
     fs::File,
     io::Write,
-    os::unix::io::{AsFd, AsRawFd, BorrowedFd, RawFd},
 };
+
+// Platform-specific fd imports
+#[cfg(unix)]
+use std::os::unix::io::{AsFd, AsRawFd, BorrowedFd, RawFd};
+
+#[cfg(windows)]
+use std::os::windows::io::{AsHandle, AsRawHandle, BorrowedHandle, RawHandle};
+
+#[cfg(windows)]
+type RawFd = RawHandle;
+#[cfg(windows)]
+type BorrowedFd<'a> = BorrowedHandle<'a>;
 
 /// A file whose fd cannot be written by other processes
 ///
@@ -72,14 +87,30 @@ impl SealedFile {
     }
 }
 
+#[cfg(unix)]
 impl AsRawFd for SealedFile {
     fn as_raw_fd(&self) -> RawFd {
         self.file.as_raw_fd()
     }
 }
 
+#[cfg(unix)]
 impl AsFd for SealedFile {
     fn as_fd(&self) -> BorrowedFd<'_> {
         self.file.as_fd()
+    }
+}
+
+#[cfg(windows)]
+impl AsRawHandle for SealedFile {
+    fn as_raw_handle(&self) -> RawHandle {
+        std::os::windows::io::AsRawHandle::as_raw_handle(&self.file)
+    }
+}
+
+#[cfg(windows)]
+impl AsHandle for SealedFile {
+    fn as_handle(&self) -> BorrowedHandle<'_> {
+        std::os::windows::io::AsHandle::as_handle(&self.file)
     }
 }

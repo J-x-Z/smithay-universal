@@ -1,0 +1,5 @@
+error: failed to parse manifest at `C:\Users\Z1529\.gemini\antigravity\scratch\smithay-universal\Cargo.toml`
+
+Caused by:
+  feature `wayland_frontend` includes `tempfile`, but `tempfile` is not an optional dependency
+  A non-optional dependency of the same name is defined; consider adding `optional = true` to its definition.

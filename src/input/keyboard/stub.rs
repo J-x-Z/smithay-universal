@@ -11,9 +11,26 @@ use std::fmt;
 pub trait KeyboardTarget<D>: IsAlive + fmt::Debug + Send {}
 
 /// Stub for KeyboardHandle
-#[derive(Clone, Debug, PartialEq)]
 pub struct KeyboardHandle<D: ?Sized> {
-    _marker: std::marker::PhantomData<D>,
+    _marker: std::marker::PhantomData<fn() -> D>,
+}
+
+impl<D: ?Sized> Clone for KeyboardHandle<D> {
+    fn clone(&self) -> Self {
+        KeyboardHandle { _marker: std::marker::PhantomData }
+    }
+}
+
+impl<D: ?Sized> fmt::Debug for KeyboardHandle<D> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("KeyboardHandle").finish()
+    }
+}
+
+impl<D: ?Sized> PartialEq for KeyboardHandle<D> {
+    fn eq(&self, _other: &Self) -> bool {
+        true // Stub always equal
+    }
 }
 
 /// Stub for KeysymHandle

@@ -1,0 +1,461 @@
+warning: unused manifest key: build-dependencies.pkg-config.members
+warning: unused manifest key: build-dependencies.pkg-config.resolver
+   Compiling smithay v0.7.0 (C:\Users\Z1529\.gemini\antigravity\scratch\smithay-universal)
+error[E0433]: failed to resolve: could not find `egl` in `backend`
+  --> src\backend\renderer\gles\mod.rs:49:9
+   |
+49 |         egl::{
+   |         ^^^ could not find `egl` in `backend`
+   |
+note: found an item that was configured out
+  --> src\backend\mod.rs:91:9
+   |
+91 | pub mod egl;
+   |         ^^^
+note: the item is gated here
+  --> src\backend\mod.rs:90:1
+   |
+90 | #[cfg(all(unix, feature = "backend_egl"))]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0432]: unresolved imports `crate::backend::allocator::dmabuf`, `crate::backend::egl`
+  --> src\backend\renderer\gles\mod.rs:45:13
+   |
+45 |             dmabuf::{Dmabuf, WeakDmabuf},
+   |             ^^^^^^ could not find `dmabuf` in `allocator`
+...
+49 |         egl::{
+   |         ^^^ could not find `egl` in `backend`
+   |
+note: found an item that was configured out
+  --> src\backend\allocator\mod.rs:19:9
+   |
+19 | pub mod dmabuf;
+   |         ^^^^^^
+note: the item is gated here
+  --> src\backend\allocator\mod.rs:18:1
+   |
+18 | #[cfg(unix)]
+   | ^^^^^^^^^^^^
+note: found an item that was configured out
+  --> src\backend\mod.rs:91:9
+   |
+91 | pub mod egl;
+   |         ^^^
+note: the item is gated here
+  --> src\backend\mod.rs:90:1
+   |
+90 | #[cfg(all(unix, feature = "backend_egl"))]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0433]: failed to resolve: could not find `egl` in `backend`
+  --> src\backend\renderer\gles\error.rs:35:52
+   |
+35 |     ContextActivationError(#[from] crate::backend::egl::MakeCurrentError),
+   |                                                    ^^^ could not find `egl` in `backend`
+   |
+note: found an item that was configured out
+  --> src\backend\mod.rs:91:9
+   |
+91 | pub mod egl;
+   |         ^^^
+note: the item is gated here
+  --> src\backend\mod.rs:90:1
+   |
+90 | #[cfg(all(unix, feature = "backend_egl"))]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0433]: failed to resolve: could not find `egl` in `backend`
+  --> src\backend\renderer\gles\error.rs:38:50
+   |
+38 |     BindBufferEGLError(#[source] crate::backend::egl::Error),
+   |                                                  ^^^ could not find `egl` in `backend`
+   |
+note: found an item that was configured out
+  --> src\backend\mod.rs:91:9
+   |
+91 | pub mod egl;
+   |         ^^^
+note: the item is gated here
+  --> src\backend\mod.rs:90:1
+   |
+90 | #[cfg(all(unix, feature = "backend_egl"))]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0433]: failed to resolve: could not find `egl` in `backend`
+   --> src\backend\renderer\gles\mod.rs:507:60
+    |
+507 |         let gl = ffi::Gles2::load_with(|s| crate::backend::egl::get_proc_address(s) as *const _);
+    |                                                            ^^^ could not find `egl` in `backend`
+    |
+note: found an item that was configured out
+   --> src\backend\mod.rs:91:9
+    |
+91  | pub mod egl;
+    |         ^^^
+note: the item is gated here
+   --> src\backend\mod.rs:90:1
+    |
+90  | #[cfg(all(unix, feature = "backend_egl"))]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0433]: failed to resolve: could not find `egl` in `backend`
+   --> src\backend\renderer\gles\mod.rs:631:64
+    |
+631 |             let gl = ffi::Gles2::load_with(|s| crate::backend::egl::get_proc_address(s) as *const _);
+    |                                                                ^^^ could not find `egl` in `backend`
+    |
+note: found an item that was configured out
+   --> src\backend\mod.rs:91:9
+    |
+91  | pub mod egl;
+    |         ^^^
+note: the item is gated here
+   --> src\backend\mod.rs:90:1
+    |
+90  | #[cfg(all(unix, feature = "backend_egl"))]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0412]: cannot find type `Dmabuf` in this scope
+   --> src\backend\renderer\mod.rs:660:18
+    |
+660 |         dmabuf: &Dmabuf,
+    |                  ^^^^^^ not found in this scope
+
+warning: unused import: `CStr`
+ --> src\backend\wgl\ffi.rs:5:24
+  |
+5 | use std::ffi::{c_void, CStr, CString};
+  |                        ^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `Symbol`
+ --> src\backend\wgl\ffi.rs:8:27
+  |
+8 | use libloading::{Library, Symbol};
+  |                           ^^^^^^
+
+warning: unused import: `std::ffi::c_void`
+  --> src\backend\wgl\mod.rs:14:5
+   |
+14 | use std::ffi::c_void;
+   |     ^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::ptr`
+   --> src\compat\mod.rs:132:9
+    |
+132 |     use std::ptr;
+    |         ^^^^^^^^
+
+error[E0277]: `D` cannot be sent between threads safely
+   --> src\input\dnd\grab.rs:314:31
+    |
+314 | impl<D, S> PointerGrab<D> for DnDGrab<D, S, D::PointerFocus>
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `D` cannot be sent between threads safely
+    |
+note: required because it appears within the type `PhantomData<D>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\marker.rs:815:12
+note: required because it appears within the type `stub::KeyboardHandle<D>`
+   --> src\input\keyboard\stub.rs:15:12
+    |
+15  | pub struct KeyboardHandle<D: ?Sized> {
+    |            ^^^^^^^^^^^^^^
+note: required because it appears within the type `Option<stub::KeyboardHandle<D>>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\option.rs:591:10
+note: required because it appears within the type `input::Inner<D>`
+   --> src\input\mod.rs:244:19
+    |
+244 | pub(crate) struct Inner<D: SeatHandler> {
+    |                   ^^^^^
+    = note: required for `std::sync::Mutex<input::Inner<D>>` to implement `Sync`
+note: required because it appears within the type `SeatRc<D>`
+   --> src\input\mod.rs:278:19
+    |
+278 | pub(crate) struct SeatRc<D: SeatHandler> {
+    |                   ^^^^^^
+    = note: required for `std::sync::Arc<SeatRc<D>>` to implement `std::marker::Send`
+note: required because it appears within the type `Seat<D>`
+   --> src\input\mod.rs:187:12
+    |
+187 | pub struct Seat<D: SeatHandler> {
+    |            ^^^^
+note: required because it appears within the type `DnDGrab<D, S, <D as SeatHandler>::PointerFocus>`
+   --> src\input\dnd\grab.rs:41:12
+    |
+41  | pub struct DnDGrab<D: SeatHandler, S: Source, F: DndFocus<D> + 'static> {
+    |            ^^^^^^^
+note: required by a bound in `PointerGrab`
+   --> src\input\pointer\grab.rs:37:40
+    |
+37  | pub trait PointerGrab<D: SeatHandler>: Send + Downcast {
+    |                                        ^^^^ required by this bound in `PointerGrab`
+help: consider further restricting type parameter `D` with trait `Send`
+    |
+316 |     D: DndGrabHandler + std::marker::Send,
+    |                       +++++++++++++++++++
+
+error[E0277]: `D` cannot be sent between threads safely
+   --> src\input\dnd\grab.rs:445:29
+    |
+445 | impl<D, S> TouchGrab<D> for DnDGrab<D, S, D::TouchFocus>
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `D` cannot be sent between threads safely
+    |
+note: required because it appears within the type `PhantomData<D>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\marker.rs:815:12
+note: required because it appears within the type `stub::KeyboardHandle<D>`
+   --> src\input\keyboard\stub.rs:15:12
+    |
+15  | pub struct KeyboardHandle<D: ?Sized> {
+    |            ^^^^^^^^^^^^^^
+note: required because it appears within the type `Option<stub::KeyboardHandle<D>>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\option.rs:591:10
+note: required because it appears within the type `input::Inner<D>`
+   --> src\input\mod.rs:244:19
+    |
+244 | pub(crate) struct Inner<D: SeatHandler> {
+    |                   ^^^^^
+    = note: required for `std::sync::Mutex<input::Inner<D>>` to implement `Sync`
+note: required because it appears within the type `SeatRc<D>`
+   --> src\input\mod.rs:278:19
+    |
+278 | pub(crate) struct SeatRc<D: SeatHandler> {
+    |                   ^^^^^^
+    = note: required for `std::sync::Arc<SeatRc<D>>` to implement `std::marker::Send`
+note: required because it appears within the type `Seat<D>`
+   --> src\input\mod.rs:187:12
+    |
+187 | pub struct Seat<D: SeatHandler> {
+    |            ^^^^
+note: required because it appears within the type `DnDGrab<D, S, <D as SeatHandler>::TouchFocus>`
+   --> src\input\dnd\grab.rs:41:12
+    |
+41  | pub struct DnDGrab<D: SeatHandler, S: Source, F: DndFocus<D> + 'static> {
+    |            ^^^^^^^
+note: required by a bound in `TouchGrab`
+   --> src\input\touch\grab.rs:33:38
+    |
+33  | pub trait TouchGrab<D: SeatHandler>: Send + Downcast {
+    |                                      ^^^^ required by this bound in `TouchGrab`
+help: consider further restricting type parameter `D` with trait `Send`
+    |
+447 |     D: DndGrabHandler + std::marker::Send,
+    |                       +++++++++++++++++++
+
+error[E0658]: use of unstable library feature `once_cell_try`
+  --> src\backend\wgl\ffi.rs:27:16
+   |
+27 |     GL_LIBRARY.get_or_try_init(|| {
+   |                ^^^^^^^^^^^^^^^
+   |
+   = note: see issue #109737 <https://github.com/rust-lang/rust/issues/109737> for more information
+
+error[E0658]: use of unstable library feature `once_cell_try`
+  --> src\backend\wgl\ffi.rs:32:19
+   |
+32 |     WGL_FUNCTIONS.get_or_try_init(|| {
+   |                   ^^^^^^^^^^^^^^^
+   |
+   = note: see issue #109737 <https://github.com/rust-lang/rust/issues/109737> for more information
+
+error[E0277]: `D` cannot be sent between threads safely
+   --> src\input\dnd\grab.rs:465:31
+    |
+465 |         if event.slot != self.start_data().slot {
+    |                               ^^^^^^^^^^ `D` cannot be sent between threads safely
+    |
+note: required because it appears within the type `PhantomData<D>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\marker.rs:815:12
+note: required because it appears within the type `stub::KeyboardHandle<D>`
+   --> src\input\keyboard\stub.rs:15:12
+    |
+15  | pub struct KeyboardHandle<D: ?Sized> {
+    |            ^^^^^^^^^^^^^^
+note: required because it appears within the type `Option<stub::KeyboardHandle<D>>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\option.rs:591:10
+note: required because it appears within the type `input::Inner<D>`
+   --> src\input\mod.rs:244:19
+    |
+244 | pub(crate) struct Inner<D: SeatHandler> {
+    |                   ^^^^^
+    = note: required for `std::sync::Mutex<input::Inner<D>>` to implement `Sync`
+note: required because it appears within the type `SeatRc<D>`
+   --> src\input\mod.rs:278:19
+    |
+278 | pub(crate) struct SeatRc<D: SeatHandler> {
+    |                   ^^^^^^
+    = note: required for `std::sync::Arc<SeatRc<D>>` to implement `std::marker::Send`
+note: required because it appears within the type `Seat<D>`
+   --> src\input\mod.rs:187:12
+    |
+187 | pub struct Seat<D: SeatHandler> {
+    |            ^^^^
+note: required because it appears within the type `DnDGrab<D, S, <D as SeatHandler>::TouchFocus>`
+   --> src\input\dnd\grab.rs:41:12
+    |
+41  | pub struct DnDGrab<D: SeatHandler, S: Source, F: DndFocus<D> + 'static> {
+    |            ^^^^^^^
+note: required by a bound in `TouchGrab::start_data`
+   --> src\input\touch\grab.rs:33:38
+    |
+33  | pub trait TouchGrab<D: SeatHandler>: Send + Downcast {
+    |                                      ^^^^ required by this bound in `TouchGrab::start_data`
+...
+109 |     fn start_data(&self) -> &GrabStartData<D>;
+    |        ---------- required by a bound in this associated function
+help: consider further restricting type parameter `D` with trait `Send`
+    |
+447 |     D: DndGrabHandler + std::marker::Send,
+    |                       +++++++++++++++++++
+
+error[E0277]: `D` cannot be sent between threads safely
+   --> src\input\dnd\grab.rs:480:31
+    |
+480 |         if event.slot != self.start_data().slot {
+    |                               ^^^^^^^^^^ `D` cannot be sent between threads safely
+    |
+note: required because it appears within the type `PhantomData<D>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\marker.rs:815:12
+note: required because it appears within the type `stub::KeyboardHandle<D>`
+   --> src\input\keyboard\stub.rs:15:12
+    |
+15  | pub struct KeyboardHandle<D: ?Sized> {
+    |            ^^^^^^^^^^^^^^
+note: required because it appears within the type `Option<stub::KeyboardHandle<D>>`
+   --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\core\src\option.rs:591:10
+note: required because it appears within the type `input::Inner<D>`
+   --> src\input\mod.rs:244:19
+    |
+244 | pub(crate) struct Inner<D: SeatHandler> {
+    |                   ^^^^^
+    = note: required for `std::sync::Mutex<input::Inner<D>>` to implement `Sync`
+note: required because it appears within the type `SeatRc<D>`
+   --> src\input\mod.rs:278:19
+    |
+278 | pub(crate) struct SeatRc<D: SeatHandler> {
+    |                   ^^^^^^
+    = note: required for `std::sync::Arc<SeatRc<D>>` to implement `std::marker::Send`
+note: required because it appears within the type `Seat<D>`
+   --> src\input\mod.rs:187:12
+    |
+187 | pub struct Seat<D: SeatHandler> {
+    |            ^^^^
+note: required because it appears within the type `DnDGrab<D, S, <D as SeatHandler>::TouchFocus>`
+   --> src\input\dnd\grab.rs:41:12
+    |
+41  | pub struct DnDGrab<D: SeatHandler, S: Source, F: DndFocus<D> + 'static> {
+    |            ^^^^^^^
+note: required by a bound in `TouchGrab::start_data`
+   --> src\input\touch\grab.rs:33:38
+    |
+33  | pub trait TouchGrab<D: SeatHandler>: Send + Downcast {
+    |                                      ^^^^ required by this bound in `TouchGrab::start_data`
+...
+109 |     fn start_data(&self) -> &GrabStartData<D>;
+    |        ---------- required by a bound in this associated function
+help: consider further restricting type parameter `D` with trait `Send`
+    |
+447 |     D: DndGrabHandler + std::marker::Send,
+    |                       +++++++++++++++++++
+
+error[E0277]: `D` doesn't implement `std::fmt::Debug`
+   --> src\input\mod.rs:260:32
+    |
+260 |             .field("keyboard", &self.keyboard)
+    |                                ^^^^^^^^^^^^^^ the trait `std::fmt::Debug` is not implemented for `D`
+    |
+note: required for `stub::KeyboardHandle<D>` to implement `std::fmt::Debug`
+   --> src\input\keyboard\stub.rs:14:17
+    |
+14  | #[derive(Clone, Debug, PartialEq)]
+    |                 ^^^^^ unsatisfied trait bound introduced in this `derive` macro
+    = note: 1 redundant requirement hidden
+    = note: required for `Option<stub::KeyboardHandle<D>>` to implement `std::fmt::Debug`
+    = note: required for the cast from `&Option<stub::KeyboardHandle<D>>` to `&dyn std::fmt::Debug`
+help: consider further restricting type parameter `D` with trait `Debug`
+    |
+256 | impl<D: SeatHandler + std::fmt::Debug> fmt::Debug for Inner<D> {
+    |                     +++++++++++++++++
+
+error[E0277]: the trait bound `stub::KeyboardHandle<_>: Clone` is not satisfied
+   --> src\input\mod.rs:583:40
+    |
+583 |         inner.keyboard = Some(keyboard.clone());
+    |                                        ^^^^^ the trait `Clone` is not implemented for `stub::KeyboardHandle<_>`
+    |
+note: required for `stub::KeyboardHandle<D>` to implement `Clone`
+   --> src\input\keyboard\stub.rs:14:10
+    |
+14  | #[derive(Clone, Debug, PartialEq)]
+    |          ^^^^^ unsatisfied trait bound introduced in this `derive` macro
+help: consider borrowing here
+    |
+583 |         inner.keyboard = Some((&keyboard).clone());
+    |                               ++        +
+
+error[E0599]: the method `clone` exists for enum `Option<stub::KeyboardHandle<D>>`, but its trait bounds were not satisfied
+   --> src\input\mod.rs:591:49
+    |
+591 |         self.arc.inner.lock().unwrap().keyboard.clone()
+    |                                                 ^^^^^ method cannot be called on `Option<stub::KeyboardHandle<D>>` due to unsatisfied trait bounds
+    |
+   ::: src\input\keyboard\stub.rs:15:1
+    |
+15  | pub struct KeyboardHandle<D: ?Sized> {
+    | ------------------------------------ doesn't satisfy `stub::KeyboardHandle<D>: Clone`
+    |
+    = note: the following trait bounds were not satisfied:
+            `stub::KeyboardHandle<D>: Clone`
+            which is required by `Option<stub::KeyboardHandle<D>>: Clone`
+help: consider annotating `stub::KeyboardHandle<D>` with `#[derive(Clone)]`
+   --> src\input\keyboard\stub.rs:15:1
+    |
+15  + #[derive(Clone)]
+16  | pub struct KeyboardHandle<D: ?Sized> {
+    |
+
+error[E0599]: no method named `as_handle` found for struct `std::sync::Arc<OwnedHandle>` in the current scope
+  --> src\utils\fd.rs:32:18
+   |
+32 |         { self.0.as_handle() }
+   |                  ^^^^^^^^^
+  --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\std\src\os\windows\io\handle.rs:441:8
+   |
+   = note: the method is available for `std::sync::Arc<OwnedHandle>` here
+   |
+   = help: items from traits can only be used if the trait is in scope
+help: trait `AsHandle` which provides `as_handle` is implemented but not in scope; perhaps you want to import it
+   |
+3  + use std::os::windows::io::AsHandle;
+   |
+help: there is a method `as_raw_handle` with a similar name
+   |
+32 |         { self.0.as_raw_handle() }
+   |                     ++++
+
+error[E0599]: no function or associated item named `from_raw_handle` found for struct `OwnedHandle` in the current scope
+  --> src\utils\fd.rs:54:73
+   |
+54 |         { DeviceFd(Arc::new(unsafe { std::os::windows::io::OwnedHandle::from_raw_handle(fd) })) }
+   |                                                                         ^^^^^^^^^^^^^^^ function or associated item not found in `OwnedHandle`
+   |
+   = help: items from traits can only be used if the trait is in scope
+help: there is a method `as_raw_handle` with a similar name, but with different arguments
+  --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\std\src\os\windows\io\raw.rs:40:5
+help: trait `FromRawHandle` which provides `from_raw_handle` is implemented but not in scope; perhaps you want to import it
+   |
+3  + use std::os::windows::io::FromRawHandle;
+   |
+
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `tempfile`
+  --> src\utils\sealed_file.rs:73:24
+   |
+73 |         let mut file = tempfile::tempfile()?;
+   |                        ^^^^^^^^ use of unresolved module or unlinked crate `tempfile`
+   |
+   = help: if you wanted to use a crate named `tempfile`, use `cargo add tempfile` to add it to your `Cargo.toml`
+
+Some errors have detailed explanations: E0277, E0412, E0432, E0433, E0599, E0658.
+For more information about an error, try `rustc --explain E0277`.
+warning: `smithay` (lib) generated 4 warnings
+error: could not compile `smithay` (lib) due to 19 previous errors; 4 warnings emitted

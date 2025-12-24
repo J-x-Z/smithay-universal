@@ -1,0 +1,46 @@
+warning: unused manifest key: build-dependencies.pkg-config.members
+warning: unused manifest key: build-dependencies.pkg-config.resolver
+    Checking errno v0.3.14
+   Compiling syn v2.0.111
+   Compiling wayland-backend v0.3.11
+    Checking wayland-sys v0.31.7
+    Checking windows-targets v0.48.5
+    Checking generic-array v0.14.7
+   Compiling wayland-scanner v0.31.7
+    Checking windows-sys v0.59.0
+   Compiling libudev-sys v0.1.4
+    Checking log v0.4.29
+   Compiling io-lifetimes v1.0.11
+    Checking pin-project-lite v0.2.16
+    Checking drm-sys v0.8.0
+   Compiling num-traits v0.2.19
+    Checking drm-fourcc v2.2.0
+    Checking crossbeam-utils v0.8.21
+    Checking zerocopy v0.8.31
+error[E0433]: failed to resolve: could not find `unix` in `os`
+ --> C:\Users\Z1529\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\wayland-sys-0.31.7\src\common.rs:4:14
+  |
+4 | use std::os::unix::io::RawFd;
+  |              ^^^^ could not find `unix` in `os`
+  |
+note: found an item that was configured out
+ --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\std\src\os\mod.rs:36:9
+note: the item is gated here
+ --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\std\src\os\mod.rs:28:1
+note: found an item that was configured out
+ --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\std\src\os\mod.rs:85:9
+note: the item is gated here
+ --> /rustc/29483883eed69d5fb4db01964cdf2af4d86e9cb2\library\std\src\os\mod.rs:84:1
+
+For more information about this error, try `rustc --explain E0433`.
+    Checking rustix v1.1.2
+error: could not compile `wayland-sys` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error[E0425]: cannot find value `O_CLOEXEC` in crate `libc`
+  --> C:\Users\Z1529\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\drm-sys-0.8.0\src\lib.rs:19:40
+   |
+19 |     pub const DRM_CLOEXEC: u32 = libc::O_CLOEXEC as u32;
+   |                                        ^^^^^^^^^ not found in `libc`
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `drm-sys` (lib) due to 1 previous error
