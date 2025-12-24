@@ -16,8 +16,13 @@ We have significantly overhauled the `backend::winit` module to serve as a produ
 ### 2. Event Loop Fusion
 - **CFRunLoop Integration**: Implements a `Calloop` Event Source that hooks directly into macOS `CFRunLoop`, allowing Wayland clients to be dispatched purely within the native macOS application loop.
 - **Input Bridging**: Low-latency translation of `Winit` events to Wayland input events (keyboard, mouse, touchpad gestures).
+### 3. Experimental: "Turbo-Charged" SIMD Acceleration
+- **Zero-Cost Mapping**: Implements the "Zero-Cost Protocol Virtualization" architecture described in our IEEE TC paper draft.
+- **NEON/AVX2 Swizzling**: Includes a hand-tuned [SIMD module](src/utils/simd_utils.rs) for `wl_shm` format conversion, bridging the performance gap on non-Linux platforms lacking `dmabuf`.
+- **Validation**: Pass `swizzle_correctness` check via `cargo test` (or standalone `turbo_test.rs`).
+- **📄 Paper**: Full manuscript and benchmarks at [../paper/](../paper/)
 
-### 3. Build System
+### 4. Build System
 - Decoupled `gbm` and `libinput` dependencies to allow compilation on non-Linux targets.
 - Added macOS-specific feature flags and linking arguments.
 
