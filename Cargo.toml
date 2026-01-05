@@ -34,7 +34,7 @@ keywords = [
     "server",
 ]
 categories = ["gui"]
-license = "MIT"
+license = "GPL-3.0-only"
 repository = "https://github.com/Smithay/smithay"
 
 [package.metadata.docs.rs]

@@ -95,3 +95,13 @@ Rust.
 ## Contact us
 
 If you have questions or want to discuss the project with us, our main chatroom is on Matrix: [`#smithay:matrix.org`](https://matrix.to/#/#smithay:matrix.org).
+
+## License
+
+This project (Smithay-Universal) is licensed under the **GNU General Public License v3.0**.
+
+The original [Smithay](https://github.com/Smithay/smithay) library remains under the MIT license. Modifications in this fork are licensed under GPLv3.
+
+Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
+
+See the [LICENSE](LICENSE) file for details.
