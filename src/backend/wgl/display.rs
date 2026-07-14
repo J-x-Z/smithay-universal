@@ -43,12 +43,12 @@ impl WGLDisplay {
     /// The window handle must be valid for the lifetime of the display.
     pub unsafe fn from_window(hwnd: isize) -> Result<Self, Error> {
         ffi::init_gl_library()?;
-        
+
         let hdc = ffi::GetDC(hwnd);
         if hdc == 0 {
             return Err(Error::GetDCFailed);
         }
-        
+
         // Set up pixel format
         let pfd = ffi::PixelFormatDescriptor {
             n_size: std::mem::size_of::<ffi::PixelFormatDescriptor>() as u16,
@@ -61,18 +61,18 @@ impl WGLDisplay {
             i_layer_type: ffi::PFD_MAIN_PLANE,
             ..Default::default()
         };
-        
+
         let pixel_format = ffi::ChoosePixelFormat(hdc, &pfd);
         if pixel_format == 0 {
             ffi::ReleaseDC(hwnd, hdc);
             return Err(Error::ChoosePixelFormatFailed);
         }
-        
+
         if ffi::SetPixelFormat(hdc, pixel_format, &pfd) == 0 {
             ffi::ReleaseDC(hwnd, hdc);
             return Err(Error::SetPixelFormatFailed);
         }
-        
+
         Ok(Self {
             handle: Arc::new(WGLDisplayHandle {
                 hdc,
@@ -81,18 +81,18 @@ impl WGLDisplay {
             }),
         })
     }
-    
+
     /// Create from existing HDC (caller retains ownership)
     ///
     /// # Safety
     /// The HDC must be valid and have a suitable pixel format set.
     pub unsafe fn from_raw(hdc: isize) -> Result<Self, Error> {
         ffi::init_gl_library()?;
-        
+
         if hdc == 0 {
             return Err(Error::GetDCFailed);
         }
-        
+
         Ok(Self {
             handle: Arc::new(WGLDisplayHandle {
                 hdc,
@@ -101,12 +101,12 @@ impl WGLDisplay {
             }),
         })
     }
-    
+
     /// Get the raw HDC handle
     pub fn hdc(&self) -> isize {
         self.handle.hdc
     }
-    
+
     /// Swap buffers (for double buffering)
     pub fn swap_buffers(&self) -> bool {
         unsafe { ffi::SwapBuffers(self.handle.hdc) != 0 }

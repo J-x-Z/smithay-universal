@@ -167,6 +167,7 @@ wayland_frontend = [
     "wayland-protocols-misc",
     "tempfile",
 ]
+xkbcommon = ["dep:xkbcommon"]
 x11rb_event_source = ["x11rb"]
 xwayland = [
     "encoding_rs",
@@ -430,17 +431,3 @@ optional = true
 [build-dependencies.pkg-config]
 version = "0.3.17"
 optional = true
-
-
-members = [
-    "smithay-drm-extras",
-    "smallvil",
-    "anvil",
-    "wlcs_anvil",
-    "test_clients",
-]
-resolver = "3"
-
-[profile.release-with-debug]
-debug = 2
-inherits = "release"

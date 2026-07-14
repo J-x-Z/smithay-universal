@@ -24,15 +24,9 @@ use crate::wayland::{compositor::SurfaceData, shm::fourcc_to_shm_format};
 #[cfg(feature = "wayland_frontend")]
 use wayland_server::protocol::{wl_buffer, wl_shm};
 
-#[cfg(any(
-    all(unix, feature = "backend_egl"),
-    all(windows, feature = "backend_wgl")
-))]
+#[cfg(any(all(unix, feature = "backend_egl"), all(windows, feature = "backend_wgl")))]
 mod gl_loader;
-#[cfg(any(
-    all(unix, feature = "backend_egl"),
-    all(windows, feature = "backend_wgl")
-))]
+#[cfg(any(all(unix, feature = "backend_egl"), all(windows, feature = "backend_wgl")))]
 pub use gl_loader::get_proc_address;
 
 // GLES renderer requires EGL for context management, so Unix-only for now

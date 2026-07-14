@@ -4,6 +4,7 @@
 //! smithay to compile and run on Windows.
 
 #[cfg(unix)]
+/// File-descriptor types and traits used by Unix platform code.
 pub mod fd {
     pub use std::os::unix::io::{AsFd, AsRawFd, BorrowedFd, FromRawFd, IntoRawFd, OwnedFd, RawFd};
 }
@@ -96,7 +97,10 @@ pub mod time {
 
     impl Timespec {
         pub fn new(sec: i64, nsec: i64) -> Self {
-            Self { tv_sec: sec, tv_nsec: nsec }
+            Self {
+                tv_sec: sec,
+                tv_nsec: nsec,
+            }
         }
     }
 

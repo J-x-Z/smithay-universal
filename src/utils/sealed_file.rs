@@ -2,11 +2,7 @@
 //!
 //! Uses memfd on Linux/Android/FreeBSD, tempfile on others
 
-use std::{
-    ffi::CStr,
-    fs::File,
-    io::Write,
-};
+use std::{ffi::CStr, fs::File};
 
 // Platform-specific fd imports
 #[cfg(unix)]
@@ -44,7 +40,7 @@ impl SealedFile {
     #[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "android"))]
     pub fn with_data(name: &CStr, data: &[u8]) -> Result<Self, std::io::Error> {
         use rustix::fs::{MemfdFlags, SealFlags};
-        use std::io::Seek;
+        use std::io::{Seek, Write};
 
         let fd = rustix::fs::memfd_create(name, MemfdFlags::CLOEXEC | MemfdFlags::ALLOW_SEALING)?;
 

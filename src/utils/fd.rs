@@ -1,18 +1,15 @@
 #![forbid(unsafe_op_in_unsafe_fn)]
 
-use std::{
-    path::PathBuf,
-    sync::Arc,
-};
+use std::{path::PathBuf, sync::Arc};
 
 // Use platform-compatible fd types
 #[cfg(unix)]
 use std::os::unix::io::{AsFd, AsRawFd, BorrowedFd, FromRawFd, OwnedFd, RawFd};
 
 #[cfg(windows)]
-use std::os::windows::io::{AsHandle, AsRawHandle, BorrowedHandle, FromRawHandle, OwnedHandle, RawHandle};
-#[cfg(windows)]
 use crate::compat::{AsFd, AsRawFd, BorrowedFd, FromRawFd, OwnedFd, RawFd};
+#[cfg(windows)]
+use std::os::windows::io::{AsHandle, AsRawHandle, BorrowedHandle, FromRawHandle, OwnedHandle, RawHandle};
 
 /// Ref-counted file descriptor of an open device node
 #[derive(Debug, Clone)]
@@ -29,9 +26,13 @@ impl AsFd for DeviceFd {
     #[inline]
     fn as_fd(&self) -> BorrowedFd<'_> {
         #[cfg(unix)]
-        { self.0.as_fd() }
+        {
+            self.0.as_fd()
+        }
         #[cfg(windows)]
-        { AsHandle::as_handle(&*self.0) }
+        {
+            AsHandle::as_handle(&*self.0)
+        }
     }
 }
 
@@ -39,9 +40,13 @@ impl AsRawFd for DeviceFd {
     #[inline]
     fn as_raw_fd(&self) -> RawFd {
         #[cfg(unix)]
-        { self.0.as_raw_fd() }
+        {
+            self.0.as_raw_fd()
+        }
         #[cfg(windows)]
-        { AsRawHandle::as_raw_handle(&*self.0) }
+        {
+            AsRawHandle::as_raw_handle(&*self.0)
+        }
     }
 }
 
@@ -51,9 +56,13 @@ impl FromRawFd for DeviceFd {
     #[inline]
     unsafe fn from_raw_fd(fd: RawFd) -> Self {
         #[cfg(unix)]
-        { DeviceFd(Arc::new(unsafe { OwnedFd::from_raw_fd(fd) })) }
+        {
+            DeviceFd(Arc::new(unsafe { OwnedFd::from_raw_fd(fd) }))
+        }
         #[cfg(windows)]
-        { DeviceFd(Arc::new(unsafe { FromRawHandle::from_raw_handle(fd) })) }
+        {
+            DeviceFd(Arc::new(unsafe { FromRawHandle::from_raw_handle(fd) }))
+        }
     }
 }
 

@@ -17,7 +17,9 @@ pub struct KeyboardHandle<D: ?Sized> {
 
 impl<D: ?Sized> Clone for KeyboardHandle<D> {
     fn clone(&self) -> Self {
-        KeyboardHandle { _marker: std::marker::PhantomData }
+        KeyboardHandle {
+            _marker: std::marker::PhantomData,
+        }
     }
 }
 
@@ -85,7 +87,15 @@ impl<D> KeyboardHandle<D> {
         // No-op
     }
 
-    pub fn input<T>(&self, _data: &mut D, _handle: &mut T, _keycode: u32, _state: crate::backend::input::KeyState, _serial: Serial, _time: u32) {
-         // No-op
+    pub fn input<T>(
+        &self,
+        _data: &mut D,
+        _handle: &mut T,
+        _keycode: u32,
+        _state: crate::backend::input::KeyState,
+        _serial: Serial,
+        _time: u32,
+    ) {
+        // No-op
     }
 }

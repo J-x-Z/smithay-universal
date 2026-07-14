@@ -1,5 +1,5 @@
 //! SIMD-Optimized Pixel Manipulation Utilities
-//! 
+//!
 //! This module implements "Turbo-Charged" pixel format conversion.
 //! It uses architecture-specific intrinsics (AVX2 for x86_64, NEON for aarch64)
 //! to accelerate `wl_shm` software buffer swizzling.
@@ -11,7 +11,7 @@ use std::arch::x86_64::*;
 use std::arch::aarch64::*;
 
 /// Swizzles a BGRA8888 buffer to RGBA8888 (or vice versa) using SIMD.
-/// 
+///
 /// This function is optimized for high throughput "Zero-Copy" software pipelines.
 /// It processes pixels in 256-bit (AVX2) or 128-bit (NEON) chunks.
 pub fn swizzle_bgra_rgba(data: &mut [u8]) {
@@ -29,16 +29,15 @@ pub fn swizzle_bgra_rgba(data: &mut [u8]) {
 #[target_feature(enable = "avx2")]
 unsafe fn swizzle_simd(data: &mut [u8]) {
     let len = data.len();
+    let processed = len & !31;
     let mut ptr = data.as_mut_ptr();
-    let end = ptr.add(len & !31); // Process 32 bytes at a time
+    let end = ptr.add(processed); // Process 32 bytes at a time
 
     // AVX2 Shuffle Mask for swapping R and B (0th and 2nd byte in 4-byte pixel)
     // Indices: 2, 1, 0, 3, 6, 5, 4, 7...
     let mask = _mm256_setr_epi8(
-        2, 1, 0, 3, 6, 5, 4, 7,
-        10, 9, 8, 11, 14, 13, 12, 15,
-        18, 17, 16, 19, 22, 21, 20, 23,
-        26, 25, 24, 27, 30, 29, 28, 31
+        2, 1, 0, 3, 6, 5, 4, 7, 10, 9, 8, 11, 14, 13, 12, 15, 18, 17, 16, 19, 22, 21, 20, 23, 26, 25, 24, 27,
+        30, 29, 28, 31,
     );
 
     while ptr < end {
@@ -47,22 +46,19 @@ unsafe fn swizzle_simd(data: &mut [u8]) {
         _mm256_storeu_si256(ptr as *mut __m256i, swizzled);
         ptr = ptr.add(32);
     }
-    
-    // Fallback for remaining bytes happens via scalar automatically 
-    // if we added a scalar tail loop, but for paper POC this main loop is the key.
+
+    swizzle_scalar(&mut data[processed..]);
 }
 
 #[cfg(target_arch = "aarch64")]
 unsafe fn swizzle_simd(data: &mut [u8]) {
     let len = data.len();
+    let processed = len & !15;
     let mut ptr = data.as_mut_ptr();
-    let end = ptr.add(len & !15); // Process 16 bytes at a time (NEON is 128-bit)
+    let end = ptr.add(processed); // Process 16 bytes at a time (NEON is 128-bit)
 
     // NEON Shuffle Mask
-    let mask_data: [u8; 16] = [
-        2, 1, 0, 3, 6, 5, 4, 7,
-        10, 9, 8, 11, 14, 13, 12, 15
-    ];
+    let mask_data: [u8; 16] = [2, 1, 0, 3, 6, 5, 4, 7, 10, 9, 8, 11, 14, 13, 12, 15];
     let mask = vld1q_u8(mask_data.as_ptr());
 
     while ptr < end {
@@ -72,6 +68,8 @@ unsafe fn swizzle_simd(data: &mut [u8]) {
         vst1q_u8(ptr, swizzled);
         ptr = ptr.add(16);
     }
+
+    swizzle_scalar(&mut data[processed..]);
 }
 
 fn swizzle_scalar(data: &mut [u8]) {
@@ -90,19 +88,19 @@ mod tests {
         // Pattern: [R, G, B, A] = [1, 2, 3, 4]
         let mut data = vec![0u8; 64 * 4];
         for i in 0..64 {
-            data[i*4 + 0] = 1; // B (expected) / R (input)
-            data[i*4 + 1] = 2; // G
-            data[i*4 + 2] = 3; // R (expected) / B (input)
-            data[i*4 + 3] = 4; // A
+            data[i * 4 + 0] = 1; // B (expected) / R (input)
+            data[i * 4 + 1] = 2; // G
+            data[i * 4 + 2] = 3; // R (expected) / B (input)
+            data[i * 4 + 3] = 4; // A
         }
 
         swizzle_bgra_rgba(&mut data);
 
         for i in 0..64 {
-            assert_eq!(data[i*4 + 0], 3, "Red/Blue not swapped at pixel {}", i);
-            assert_eq!(data[i*4 + 1], 2, "Green touched at pixel {}", i);
-            assert_eq!(data[i*4 + 2], 1, "Blue/Red not swapped at pixel {}", i);
-            assert_eq!(data[i*4 + 3], 4, "Alpha touched at pixel {}", i);
+            assert_eq!(data[i * 4 + 0], 3, "Red/Blue not swapped at pixel {}", i);
+            assert_eq!(data[i * 4 + 1], 2, "Green touched at pixel {}", i);
+            assert_eq!(data[i * 4 + 2], 1, "Blue/Red not swapped at pixel {}", i);
+            assert_eq!(data[i * 4 + 3], 4, "Alpha touched at pixel {}", i);
         }
     }
 

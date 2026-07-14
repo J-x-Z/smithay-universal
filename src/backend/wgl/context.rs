@@ -42,7 +42,7 @@ impl WGLContext {
         if hglrc == 0 {
             return Err(Error::ContextCreationFailed);
         }
-        
+
         Ok(Self {
             handle: Arc::new(WGLContextHandle {
                 hglrc,
@@ -50,25 +50,23 @@ impl WGLContext {
             }),
         })
     }
-    
+
     /// Make this context current
     pub fn make_current(&self) -> Result<(), MakeCurrentError> {
-        let success = unsafe {
-            ffi::wgl_make_current(self.handle.display.hdc(), self.handle.hglrc)
-        };
-        
+        let success = unsafe { ffi::wgl_make_current(self.handle.display.hdc(), self.handle.hglrc) };
+
         if success {
             Ok(())
         } else {
             Err(MakeCurrentError)
         }
     }
-    
+
     /// Check if this context is current
     pub fn is_current(&self) -> bool {
         unsafe { ffi::wgl_get_current_context() == self.handle.hglrc }
     }
-    
+
     /// Unbind the current context
     pub fn unbind() -> Result<(), MakeCurrentError> {
         let success = unsafe { ffi::wgl_make_current(0, 0) };
@@ -78,17 +76,17 @@ impl WGLContext {
             Err(MakeCurrentError)
         }
     }
-    
+
     /// Get the associated display
     pub fn display(&self) -> &WGLDisplay {
         &self.handle.display
     }
-    
+
     /// Swap buffers for this context's display
     pub fn swap_buffers(&self) -> bool {
         self.handle.display.swap_buffers()
     }
-    
+
     /// Get the raw HGLRC handle
     pub fn hglrc(&self) -> isize {
         self.handle.hglrc

@@ -19,10 +19,7 @@ pub fn get_proc_address(name: &str) -> *const c_void {
 }
 
 // Fallback for unsupported configurations
-#[cfg(not(any(
-    all(unix, feature = "backend_egl"),
-    all(windows, feature = "backend_wgl")
-)))]
+#[cfg(not(any(all(unix, feature = "backend_egl"), all(windows, feature = "backend_wgl"))))]
 pub fn get_proc_address(_name: &str) -> *const c_void {
     std::ptr::null()
 }

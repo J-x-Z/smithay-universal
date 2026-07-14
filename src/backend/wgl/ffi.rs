@@ -27,35 +27,37 @@ static INIT_LOCK: Mutex<()> = Mutex::new(());
 pub fn init_gl_library() -> Result<(), super::Error> {
     // Use a lock to ensure thread-safe initialization
     let _guard = INIT_LOCK.lock().unwrap();
-    
+
     if GL_LIBRARY.get().is_some() && WGL_FUNCTIONS.get().is_some() {
         return Ok(());
     }
-    
-    let lib = GL_LIBRARY.get_or_init(|| {
-        unsafe { Library::new("opengl32.dll") }
-            .expect("Failed to load opengl32.dll")
-    });
-    
-    WGL_FUNCTIONS.get_or_init(|| {
-        unsafe {
-            WglFunctions {
-                wgl_get_proc_address: *lib.get(b"wglGetProcAddress\0")
-                    .expect("Failed to load wglGetProcAddress"),
-                wgl_create_context: *lib.get(b"wglCreateContext\0")
-                    .expect("Failed to load wglCreateContext"),
-                wgl_delete_context: *lib.get(b"wglDeleteContext\0")
-                    .expect("Failed to load wglDeleteContext"),
-                wgl_make_current: *lib.get(b"wglMakeCurrent\0")
-                    .expect("Failed to load wglMakeCurrent"),
-                wgl_get_current_context: *lib.get(b"wglGetCurrentContext\0")
-                    .expect("Failed to load wglGetCurrentContext"),
-                wgl_get_current_dc: *lib.get(b"wglGetCurrentDC\0")
-                    .expect("Failed to load wglGetCurrentDC"),
-            }
+
+    let lib = GL_LIBRARY
+        .get_or_init(|| unsafe { Library::new("opengl32.dll") }.expect("Failed to load opengl32.dll"));
+
+    WGL_FUNCTIONS.get_or_init(|| unsafe {
+        WglFunctions {
+            wgl_get_proc_address: *lib
+                .get(b"wglGetProcAddress\0")
+                .expect("Failed to load wglGetProcAddress"),
+            wgl_create_context: *lib
+                .get(b"wglCreateContext\0")
+                .expect("Failed to load wglCreateContext"),
+            wgl_delete_context: *lib
+                .get(b"wglDeleteContext\0")
+                .expect("Failed to load wglDeleteContext"),
+            wgl_make_current: *lib
+                .get(b"wglMakeCurrent\0")
+                .expect("Failed to load wglMakeCurrent"),
+            wgl_get_current_context: *lib
+                .get(b"wglGetCurrentContext\0")
+                .expect("Failed to load wglGetCurrentContext"),
+            wgl_get_current_dc: *lib
+                .get(b"wglGetCurrentDC\0")
+                .expect("Failed to load wglGetCurrentDC"),
         }
     });
-    
+
     Ok(())
 }
 
@@ -69,24 +71,26 @@ pub fn get_proc_address(name: &str) -> *const c_void {
     if init_gl_library().is_err() {
         return std::ptr::null();
     }
-    
+
     let c_name = match CString::new(name) {
         Ok(s) => s,
         Err(_) => return std::ptr::null(),
     };
-    
+
     unsafe {
         // First try wglGetProcAddress (for extension functions)
         let wgl_fns = WGL_FUNCTIONS.get().unwrap();
         let ptr = (wgl_fns.wgl_get_proc_address)(c_name.as_ptr());
-        
-        if !ptr.is_null() && ptr != std::ptr::null::<c_void>().wrapping_add(1)
+
+        if !ptr.is_null()
+            && ptr != std::ptr::null::<c_void>().wrapping_add(1)
             && ptr != std::ptr::null::<c_void>().wrapping_add(2)
             && ptr != std::ptr::null::<c_void>().wrapping_add(3)
-            && ptr != std::ptr::null::<c_void>().wrapping_sub(1) {
+            && ptr != std::ptr::null::<c_void>().wrapping_sub(1)
+        {
             return ptr;
         }
-        
+
         // Fall back to GetProcAddress from the DLL (for core GL 1.1 functions)
         let lib = GL_LIBRARY.get().unwrap();
         lib.get::<*const c_void>(c_name.as_bytes_with_nul())
